@@ -76,10 +76,11 @@ ENTRYPOINT ["ping"]
 Essayez sans argument :
 ```bash
 docker run <DockerID>/myimage:1.0
+```bash
 Essayez avec un argument :
 ```bash
 docker run <DockerID>/myimage:1.0 127.0.0.1
-```
+```bash
 ### B.2 Combinaison CMD + ENTRYPOINT
 Modifiez :
 ```bash
