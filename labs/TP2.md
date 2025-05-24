@@ -54,41 +54,41 @@ Ce TP vous apprend à tirer profit du cache de Docker pour optimiser vos builds.
 ## B. Créer des images avec Dockerfiles (2/2)
 ### B.1 Commandes par défaut : CMD et ENTRYPOINT
 Ajoutez une commande par défaut :
-```bash
+```
 CMD ["ping", "127.0.0.1", "-c", "5"]
 ```
 Rebuild :
-```bash
+```
 docker build -t <DockerID>/myimage:1.0 .
 ```
 Exécutez sans commande :
-```bash
+```
 docker run <DockerID>/myimage:1.0
 ```
 Remplacez CMD à l’exécution :
-```bash
+```
 docker run <DockerID>/myimage:1.0 echo "hello world"
 ```
 Remplacez CMD par :
-```bash
+```
 ENTRYPOINT ["ping"]
 ```
 Essayez sans argument :
-```bash
+```
 docker run <DockerID>/myimage:1.0
-```bash
+```
 Essayez avec un argument :
-```bash
+```
 docker run <DockerID>/myimage:1.0 127.0.0.1
-```bash
+```
 ### B.2 Combinaison CMD + ENTRYPOINT
 Modifiez :
-```bash
+```
 ENTRYPOINT ["ping", "-c", "3"]
 CMD ["127.0.0.1"]
 ```
 Exécutez :
-```bash
+```
 docker run <DockerID>/myimage:1.0 8.8.8.8
 docker run <DockerID>/myimage:1.0
 ```
@@ -97,11 +97,11 @@ CMD fournit les arguments par défaut, ENTRYPOINT la commande fixe. Leur combina
 ## C. Multi-Stage Builds
 ### C.1 Constructions multi-étapes
 Créez un dossier :
-```bash
+```
 mkdir multi-stage && cd multi-stage
 Créez hello.c :
 ```
-```bash
+```
 #include <stdio.h>
 int main() {
     printf("Hello, Docker!\n");
@@ -109,7 +109,7 @@ int main() {
 }
 ```
 Dockerfile de base :
-```bash
+```
 FROM alpine
 RUN apk add build-base
 COPY hello.c /app/hello.c
@@ -117,11 +117,11 @@ RUN gcc /app/hello.c -o /app/hello
 CMD ["/app/hello"]
 ```
 Build et observez la taille :
-```bash
+```
 docker build -t my-app-fat .
 ```
 Dockerfile multi-stage :
-```bash
+```
 FROM alpine as build
 RUN apk add build-base
 COPY hello.c /app/hello.c
@@ -132,19 +132,19 @@ CMD ["/app/hello"]
 ```
 Build image légère :
 
-```bash
+```
 docker build -t my-app-small .
 docker run --rm my-app-small
 ```
 ### C.2 Images intermédiaires
 Construire le stage intermédiaire :
 
-```bash
+```
 docker build -t my-build-stage --target build .
 ```
 Exécuter :
 
-```bash
+```
 docker run -it --rm my-build-stage /app/bin/hello
 ```
 ### C.3 Conclusion
@@ -154,7 +154,7 @@ Les builds multi-étapes permettent de séparer build et exécution, et produise
 ### D.1 Tags et liste
 Télécharger alpine :
 
-```bash
+```
 docker pull alpine:latest
 docker tag alpine:latest my-alpine:dev
 docker images
@@ -162,26 +162,26 @@ docker images
 ### D.2 Partage sur Docker Hub
 Connectez-vous à Docker Hub :
 
-```bash
+```
 docker login
 ```
 Retagger l’image :
-```bash
+```
 docker tag my-alpine:dev <DockerID>/my-alpine:dev
 docker push <DockerID>/my-alpine:dev
 ```
 Créez une image basée sur my-alpine:dev :
-```bash
+```
 FROM <DockerID>/my-alpine:dev
 RUN apk add --no-cache curl
 ```
 Build et push :
 
-```bash
+```
 docker build -t <DockerID>/my-alpine:1.0 .
 docker push <DockerID>/my-alpine:1.0
 ```
 Nettoyez :
-```bash
+```
 docker rmi my-alpine:dev
 ```
